@@ -1,0 +1,1882 @@
+// PROGRAM 10 
+class StackX
+{
+private int maxSize;
+private char[] stackArray;
+private int top;
+//-------------------------------------------------------------
+public StackX(int s) // constructor
+{
+maxSize = s;
+stackArray = new char[maxSize];
+top = -1;
+}
+//-------------------------------------------------------------
+public void push(char j) // put item on top of stack
+{ stackArray[++top] = j; }
+//-------------------------------------------------------------
+public char pop() // take item from top of stack
+{ return stackArray[top--]; }
+//-------------------------------------------------------------
+public char peek() // peek at top of stack
+{ return stackArray[top]; }
+//-------------------------------------------------------------
+public boolean isEmpty() // true if stack is empty
+{ return (top == -1); }
+//-------------------------------------------------------------
+public int size() // return size
+{ return top+1; }
+//-------------------------------------------------------------
+public char peekN(int n) // return item at index n
+{ return stackArray[n]; }
+//-------------------------------------------------------------
+public void displayStack(String s)
+{
+System.out.print(s);
+System.out.print("Stack (bottom-->top): ");
+for(int j=0; j<size(); j++)
+{
+System.out.print( peekN(j) );
+System.out.print(' ');
+}
+System.out.println("");
+}
+//-------------------------------------------------------------
+} // end class StackX
+////////////////////////////////////////////////////////////////
+// infix to postfix conversion
+class InToPost
+{
+private StackX theStack;
+private String input;
+private String output = "";
+
+//-------------------------------------------------------------
+public InToPost(String in) // constructor
+{
+input = in;
+int stackSize = input.length();
+theStack = new StackX(stackSize);
+}
+//-------------------------------------------------------------
+public String doTrans() // do translation to postfix
+{
+for(int j=0; j<input.length(); j++)
+{
+char ch = input.charAt(j);
+theStack.displayStack("For "+ch+" "); // *diagnostic*
+switch(ch)
+{
+case '+': // it's + or -
+case '-':
+gotOper(ch, 1); // go pop operators
+break; // (precedence 1)
+case '*': // it's * or /
+case '/':
+gotOper(ch, 2); // go pop operators
+break; // (precedence 2)
+case '(': // it's a left paren
+theStack.push(ch); // push it
+break;
+case ')': // it's a right paren
+gotParen(ch); // go pop operators
+break;
+default: // must be an operand
+output = output + ch; // write it to output
+break;
+} // end switch
+} // end for
+while( !theStack.isEmpty() ) // pop remaining opers
+{
+theStack.displayStack("While "); // *diagnostic*
+output = output + theStack.pop(); // write to output
+}
+theStack.displayStack("End "); // *diagnostic*
+return output; // return postfix
+} // end doTrans()
+//-------------------------------------------------------------
+public void gotOper(char opThis, int prec1)
+{ // got operator from input
+while( !theStack.isEmpty() )
+{
+char opTop = theStack.pop();
+if( opTop == '(' ) // if it's a '('
+{
+theStack.push(opTop); // restore '('
+break;
+}
+else // it's an operator
+{
+int prec2; // precedence of new op
+if(opTop=='+' || opTop=='-') // find new op prec
+prec2 = 1;
+else
+prec2 = 2;
+if(prec2 < prec1) // if prec of new op less
+{ // than prec of old
+theStack.push(opTop); // save newly-popped op
+break;
+}
+else // prec of new not less
+output = output + opTop; // than prec of old
+} // end else (it's an operator)
+} // end while
+theStack.push(opThis); // push new operator
+} // end gotOp()
+//-------------------------------------------------------------
+public void gotParen(char ch)
+{ // got right paren from input
+while( !theStack.isEmpty() )
+{
+char chx = theStack.pop();
+if( chx == '(' ) // if popped '('
+break; // we're done
+else // if popped operator
+output = output + chx; // output it
+} // end while
+} // end popOps()
+//-------------------------------------------------------------
+} // end class InToPost
+////////////////////////////////////////////////////////////////
+class StackXX
+{
+private int maxSize;
+private int[] stackArray;
+private int top;
+//-------------------------------------------------------------
+public StackXX(int size) // constructor
+{
+maxSize = size;
+stackArray = new int[maxSize];
+top = -1;
+}
+//-------------------------------------------------------------
+public void push(int j) // put item on top of stack
+{ stackArray[++top] = j; }
+//-------------------------------------------------------------
+public int pop() // take item from top of stack
+{ return stackArray[top--]; }
+//-------------------------------------------------------------
+public int peek() // peek at top of stack
+{ return stackArray[top]; }
+//-------------------------------------------------------------
+public boolean isEmpty() // true if stack is empty
+{ return (top == -1); }
+//-------------------------------------------------------------
+public boolean isFull() // true if stack is full
+{ return (top == maxSize-1); }
+//-------------------------------------------------------------
+public int size() // return size
+{ return top+1; }
+//-------------------------------------------------------------
+public int peekN(int n) // peek at index n
+{ return stackArray[n]; }
+//-------------------------------------------------------------
+public void displayStack(String s)
+{
+System.out.print(s);
+System.out.print("Stack (bottom-->top): ");
+for(int j=0; j<size(); j++)
+{
+System.out.print( peekN(j) );
+System.out.print(' ');
+}
+System.out.println("");
+}
+//-------------------------------------------------------------
+} // end class StackXX
+////////////////////////////////////////////////////////////////
+class ParsePost
+{
+private StackXX theStack;
+private String input;
+//-------------------------------------------------------------
+public ParsePost(String s)
+{ input = s; }
+//-------------------------------------------------------------
+public int doParse()
+{
+theStack = new StackXX(20); // make new stack
+char ch;
+int j;
+int num1, num2, interAns;
+for(j=0; j<input.length(); j++) // for each char,
+{
+ch = input.charAt(j); // read from input
+theStack.displayStack(""+ch+" "); // *diagnostic*
+if(ch >= '0' && ch <= '9') // if it's a number
+theStack.push( (int)(ch-'0') ); // push it
+else // it's an operator
+{
+num2 = theStack.pop(); // pop operands
+num1 = theStack.pop();
+switch(ch) // do arithmetic
+{
+case '+':
+interAns = num1 + num2;
+break;
+case '-':
+interAns = num1 - num2;
+break;
+case '*':
+interAns = num1 * num2;
+break;
+case '/':
+interAns = num1 / num2;
+break;
+default:
+interAns = 0;
+} // end switch
+theStack.push(interAns); // push result
+} // end else
+} // end for
+interAns = theStack.pop(); // get answer
+return interAns;
+} // end doParse()
+} // end class ParsePost
+////////////////////////////////////////////////////////////////
+class InpostApp
+{
+public static void main(String[] args) throws IOException
+{
+String input1, output1;
+int output2;
+while(true)
+{
+System.out.print("Enter infix: ");
+System.out.flush();
+input1 = getString(); // read a string from kbd
+if( input1.equals("") ) // quit if [Enter]
+break;
+// make a translator
+InToPost theTrans = new InToPost(input1);
+output1 = theTrans.doTrans(); // do the translation
+System.out.println("Postfix is " + output1 + '\n');
+// make a parser
+ParsePost aParser = new ParsePost(output1);
+output2 = aParser.doParse(); // do the evaluation
+System.out.println("Evaluates to " + output2);
+if( output1.equals("") ) // quit if [Enter]
+break;
+} // end while
+} // end main()
+//-------------------------------------------------------------
+public static String getString() throws IOException
+{
+InputStreamReader isr = new InputStreamReader(System.in);
+BufferedReader br = new BufferedReader(isr);
+String s = br.readLine();
+return s;
+}
+//-------------------------------------------------------------
+} // end class InfixApp
+
+
+
+//PROGRAM 11
+import java.io.*;
+class Link
+{
+ public double dData;
+ public Link next;
+
+ public Link(double d)
+ {
+  dData=d;
+ }
+
+ public void displayLink()
+ {
+  System.out.print(dData+" ");
+ }
+}
+ 
+class FirstLastList
+{
+ private Link first;
+ private Link last;
+ 
+ public FirstLastList()
+ {
+  first=null;
+  last=null;
+ }
+ 
+ public boolean isEmpty()
+ {
+  return first==null;
+ }
+ 
+ public void insertLast(double dd)
+ {
+  Link newLink=new Link(dd);
+  if(isEmpty())
+   first=newLink;
+  else
+   last.next=newLink;
+  last=newLink;
+ }
+ 
+ public double deleteFirst()
+ {
+  double temp=first.dData;
+  if(first.next==null)
+   last=null;
+  first=first.next;
+  return temp;
+ }
+  
+ public void displayList()
+ {
+  Link current=first;
+  while(current!=null)
+  {
+   current.displayLink();
+   current=current.next;
+  }
+  System.out.println(" ");
+ }
+}
+
+class LinkQueue
+{
+ private FirstLastList theList;
+ 
+ public LinkQueue()
+ { 
+  theList=new FirstLastList();
+ }
+
+ public boolean isEmpty()
+ {
+  return theList.isEmpty();
+ }
+ 
+ public void insert(double j)
+ {
+  theList.insertLast(j);
+ }
+
+ public double remove()
+ {
+   return  theList.deleteFirst();
+ }
+ 
+ public void displayQueue()
+ {
+  System.out.print("Queue(front--->rear):");
+  theList.displayList();
+ }
+}
+
+class LinkQueueApp
+{
+ public static void main(String args[])throws IOException 
+ {
+  char c;
+  LinkQueue theQueue=new LinkQueue();
+  do
+  {
+   System.out.println("OPERATIONS :\n1.INSERT\n2.REMOVE\n3.DISPLAY\nENTER UR CHOICE : ");
+   InputStreamReader obj=new InputStreamReader(System.in);
+   BufferedReader br=new BufferedReader(obj);
+   int ch=Integer.parseInt(br.readLine());
+   switch(ch)
+   {
+    case 1:
+ 	   System.out.println("HOW MANY ELEMENTS :");
+                    int n=Integer.parseInt(br.readLine());
+	   System.out.println("ENTER THE ELEMENTS :");	
+                     
+ 	   for(int i=0;i<n;i++)
+	   { 
+ 	    double d=Integer.parseInt(br.readLine());
+	    theQueue.insert(d);
+           }
+	   break;
+  
+    case 2:
+           System.out.println("HOW MANY ELEMENTS :");
+           int m=Integer.parseInt(br.readLine());
+	   for(int i=0;i<m;i++)
+	   { 
+	    theQueue.remove();
+           }
+	   break;
+ 
+    case 3:
+	   System.out.println("THE ELEMENTS ARE :\n");
+	   theQueue.displayQueue();
+ 	   break;
+ 
+    default:
+	    System.out.println("WRONG CHOICE!!!!!");
+   }
+   System.out.println("DO YOU WANNA CONTINUE ??? (Y/N)");
+   c=(char)br.read();
+  }while(c=='y'||c=='Y');
+ }
+}
+
+
+//PROGRAM 12
+
+import java.io.*;
+class Link
+{
+ public int data;
+
+ public Link next;
+ public Link previous;
+ 
+ public Link(int d)
+ {
+  data=d; 
+ 
+ }
+ 
+ public void displayLink()
+ { System.out.print(data+" "); }
+ 
+}
+
+class DoublyLinkedList
+{
+ private Link first;
+ private Link last;
+
+ public DoublyLinkedList()
+ {
+  first=null;
+  last=null;
+ }
+ 
+ public boolean isEmpty()
+ { return first==null; }
+ 
+
+
+ public void insertLast(int dd)
+ {
+  Link newLink=new Link(dd);
+  if(isEmpty())
+   first=newLink;
+  else
+  {
+   last.next=newLink;
+   newLink.previous=last;
+  }
+  last=newLink;
+
+ }
+
+ 
+ public boolean insertAfter(int d,int pos)
+ {
+  int p=0;
+  Link current=first;
+  while(p!=(pos-1))
+  {
+   current=current.next;
+   p++;
+   if(current==null)
+    return false;
+  }
+  Link newLink=new Link(d);
+  if(current==last)
+  {
+   newLink.next=null;
+   last=newLink;
+  }
+  else
+  {
+   newLink.next=current.next;
+   current.next.previous=newLink;
+  }
+  newLink.previous=current;
+  current.next=newLink;
+  
+  return true;
+ }
+
+ public Link deletekey(int key)
+ {
+  Link current=first;
+  while(current.data!=key)
+  {
+   current=current.next;
+   if(current==null)
+    return null;
+  }
+  if(current==first)
+   first=current.next;
+  else
+   current.previous.next=current.next;
+  if(current==last)
+   last=current.previous;
+  else
+    current.next.previous=current.previous;
+ 
+  return current;
+  
+ }
+
+ public void concatenate(DoublyLinkedList theList2)
+ {
+  Link current=theList2.first;
+  while(current!=null)
+  {
+   Link newLink=new Link(current.data);
+   last.next=newLink;
+   newLink.previous=last;
+   last=newLink;
+   current=current.next;
+  }
+ }
+
+ public void displayForward()
+ {
+  System.out.print("List(first-->last):");
+  Link current=first;
+  while(current!=null)
+  {
+   current.displayLink();
+   current=current.next;
+  }
+  System.out.println(" ");
+ }
+
+ public void displayBackward()
+ {
+  System.out.print("List(last-->first):");
+  Link current=last;
+  while(current!=null)
+  {
+   current.displayLink();
+   current=current.previous;
+  }
+  System.out.println(" ");
+ }
+}
+
+
+class DoublyLinkedApp
+{
+ public static void main(String[] args)throws IOException
+ {
+  InputStreamReader obj=new InputStreamReader(System.in);
+  BufferedReader br=new BufferedReader(obj);
+  
+  int d,dd;
+  int pos;
+  char c='Y';
+  
+  DoublyLinkedList theList1=new DoublyLinkedList();
+
+  System.out.print("ENTER THE No. OF ELEMENTS : ");
+  int n=Integer.parseInt(br.readLine());
+
+  System.out.println("ENTER  ELEMENTS : ");
+  for(int i=0;i<n;i++)
+  {
+    dd=Integer.parseInt(br.readLine()); 
+    theList1.insertLast(dd);
+  }
+
+  while(c=='y'||c=='Y')
+  {
+    InputStreamReader isr=new InputStreamReader(System.in);
+    BufferedReader BR=new BufferedReader(isr);
+
+
+   System.out.print("OPERATIONS : \n1.INSERTION AT Nth POSITION\n2.CONCATENATE TWO DOUBLY LINKED  LIST\n3.DELETE NtH ELEMENT\n4.DISPLAY\nENTER UR CHOICE : ");
+   int ch=Integer.parseInt(BR.readLine());
+   switch(ch)
+   {
+    case 1:
+	System.out.println("ENTER THE ELEMENT TO BE INSERTED AND ITS POSITION : ");
+        d=Integer.parseInt(BR.readLine());
+        pos=Integer.parseInt(BR.readLine());
+        theList1.insertAfter(d,pos);
+        break;
+    case 2:
+	 DoublyLinkedList theList2=new DoublyLinkedList();
+	 System.out.print("ENTER THE No. OF ELEMENTS : ");
+         int m=Integer.parseInt(br.readLine());
+
+         System.out.println("ENTER  ELEMENTS OF LIST TO BE CONCATENATED : ");
+         for(int i=0;i<m;i++)
+         {
+          d=Integer.parseInt(br.readLine()); 
+          theList2.insertLast(d);
+         }
+	 theList1.concatenate(theList2);
+	 break;
+
+    case 3:
+        System.out.println("ENTER THE ELEMENT TO BE DELETED : ");
+        d=Integer.parseInt(BR.readLine());
+	theList1.deletekey(d);      
+        break;
+    case 4:
+	System.out.println("DISPLAY FORWARD : ");
+        theList1.displayForward();
+        System.out.println("DISPLAY BACKWARD : ");
+        theList1.displayBackward();
+        break;
+    default:
+        System.out.println("WRONG CHOICE!!!!!");
+   }
+   System.out.print("ENTER Y TO CONTINUE : ");	   
+   c=(char)BR.read();  
+  }
+ }
+}
+
+
+//PROGRAM  13
+import java.io.*;
+class Node
+{
+ public int data;
+ public Node next;
+ public Node previous;
+ 
+ public Node(int x)
+ { data=x; }
+ 
+ public void displayNode()
+ { System.out.print(data+" "); }
+}
+
+class DoublyLinkList
+{
+ private Node first;
+ private Node last;
+  
+ public DoublyLinkList()
+ {
+  first=null;
+  last=null;
+ }
+ 
+ public void insertFirst(int  x)
+ {
+  Node newNode=new Node(x);
+  newNode.next=null;
+  if(isEmpty())
+   last=newNode;
+  else
+  {
+   first.previous=newNode;
+   newNode.next=first; 
+  } 
+  first=newNode;
+ }
+
+ public void insertLast(int x)
+ {
+  Node newNode=new Node(x);
+  newNode.next=null;
+  if(isEmpty())
+   first=newNode;
+  else
+  {
+   last.next=newNode; 
+   newNode.previous=last;
+  }
+  last=newNode;
+ }
+ 
+ public int deleteFirst()
+ { 
+  int t=first.data;
+  if(first.next==null)
+   last=null;
+  else
+   first.next.previous=null;
+  first=first.next;
+  return t;
+ }
+ 
+ public int deleteLast()
+ { 
+  int t=last.data;
+  if(first.next==null)
+   first=null;
+  else
+   last.previous.next=null;
+  last=last.previous;
+  return t;
+ }
+  
+ public boolean isEmpty()
+ { return(first==null); }
+  
+ public void displayForward()
+ {
+  Node current=first;
+  while(current!=null)
+  {
+   current.displayNode();
+   current=current.next;
+  }
+ }
+
+ public void displayBackward()
+ {
+  Node current=last;
+  while(current!=null)
+  {
+   current.displayNode();
+   current=current.previous;
+  }
+ } 
+}
+
+class Deque
+{
+ private DoublyLinkList l;
+ 
+ public Deque()
+ {
+  l=new DoublyLinkList();
+ }
+
+ public void insertLeft(int x)
+ {
+  l.insertFirst(x);
+  System.out.print("Inserted to Front");
+ }
+ 
+ public void insertRight(int x)
+ {
+  l.insertLast(x);
+  System.out.print("Inserted into Rear");
+ }
+ 
+ public int  deleteLeft()
+ { return l.deleteFirst(); }
+ 
+ public int deleteRight()
+ { return l.deleteLast(); }
+ 
+ public boolean isQueueEmpty()
+ { return l.isEmpty(); }
+ 
+ public void displayFromFront()
+ { l.displayForward(); }
+
+ public void displayFromRear()
+ { l.displayBackward(); }
+}
+ 
+class DequeApp
+{
+ public static void main(String args[])throws IOException
+ {
+  Deque q=new Deque();
+  char ch='y';
+  int n,d;
+  while(ch=='y'||ch=='Y')
+  {
+   InputStreamReader obj=new InputStreamReader(System.in);
+   BufferedReader br=new BufferedReader(obj);
+   System.out.println("MENU : \n1.INSERT AT FRONT\n2.INSERT AT REAR\n3.DELETE AT FRONT\n4.DELETE AT REAR\n5.DISPLAY FROM FRONT\n6.DISPLAY FROM REAR\nENTER UR CHOICE : ");
+   n=Integer.parseInt(br.readLine());
+   switch(n)
+   {
+    case 1:
+		System.out.println("ENTER THE DATA :");
+		d=Integer.parseInt(br.readLine());
+		q.insertLeft(d);
+		break;
+    case 2:
+		System.out.println("ENTER THE DATA : ");
+		d=Integer.parseInt(br.readLine());
+		q.insertRight(d);
+		break;
+    case 3:
+		if(q.isQueueEmpty())
+		 System.out.print("DEQUE US EMPTY");
+		else
+		{
+		 d=q.deleteLeft();
+		 System.out.print("DELETED DATA "+d);
+	  	} 
+		break;
+    case 4:
+		if(q.isQueueEmpty())
+		 System.out.print("DEQUE IS EMPTY");
+		else
+		{
+		 d=q.deleteRight();
+		 System.out.print("DELETED DATA "+d);
+	  	} 
+		break;
+   
+   case 5:
+		if(q.isQueueEmpty())
+		 System.out.print("DEQUE IS EMPTY " );
+		else
+		{
+		 System.out.print("DATAS IN DEQUE FROM FRONT :- ");
+		 q.displayFromFront();
+		}
+		break;
+    case 6:
+		if(q.isQueueEmpty())
+		 System.out.print("DEQUE IS EMPTY " );
+		else
+		{
+		 System.out.print("DATAS IN DEQUE FROM REAR :- ");
+		 q.displayFromRear();
+		}
+		break;
+    default:
+		System.out.print("INVALID CHOICE ");
+   }
+   System.out.println(" ");
+   System.out.print("ENTER Y TO CONTINUE : ");
+   ch=(char)br.read();
+  }
+ }
+}
+
+
+//PROGRAM 14
+
+import java.io.*;
+class Node
+{
+ public int rank;
+ public int roll;
+ public String name;
+ public Node leftchild;
+ public Node rightchild;
+ 
+ public void Node()
+ {
+   name=" ";
+   rank=0;
+   roll=0;
+ } 
+ 
+ public void displayRank()
+ {
+   System.out.println("ROLL No : "+roll+" NAME : "+name+" RANK : "+rank); 
+ }
+ 
+ public void displayName()
+ { System.out.print("\nNAME OF THE STUDENT IS : "+name); }
+}
+
+class Tree
+{
+ private Node root;
+ 
+ public Tree()
+ { root=null; }
+ 
+ public void find(int key)
+ {
+  Node current=root;
+  while(current.rank!=key)
+  {
+   if(key<current.rank)
+    current=current.leftchild;
+   else
+    current=current.rightchild;
+   if(current==null)
+    System.out.println("not found");
+  }
+  current.displayName();
+ }
+
+ public void insert(int rno,int r,String a)
+ {
+  Node newNode=new Node();
+  newNode.rank=r;
+  newNode.name=a;
+  newNode.roll=rno;
+  if(root==null)
+   root=newNode;
+  else
+  {
+   Node current=root;
+   Node parent;
+   while(true)
+   {
+    parent=current;
+    if(r<current.rank)
+    {
+     current=current.leftchild;
+     if(current==null)
+     {
+      parent.leftchild=newNode;
+      return; 
+     }
+    }
+    else
+    {
+     current=current.rightchild;
+     if(current==null)
+     {
+      parent.rightchild=newNode;
+      return; 
+     }
+    }
+   }
+  }
+ }
+
+ public void traverse()
+ { inOrder(root); }
+ 
+ private void inOrder(Node localRoot)
+ {
+  if(localRoot!=null)
+  {
+   inOrder(localRoot.leftchild);
+   localRoot.displayRank();
+   inOrder(localRoot.rightchild);
+  }
+ }
+}
+
+class TreeApp
+{
+public static void main(String args[])throws IOException
+{
+ 
+ Tree theTree=new Tree();
+ char ch='y';
+ int c;
+ while(ch=='y'||ch=='Y')
+ {
+  InputStreamReader isr=new InputStreamReader(System.in);
+  BufferedReader br=new BufferedReader(isr);
+  System.out.print("1.INSERT AND ORGANISE THE DATA\n2.GIVEN A RANK DISPLAY THE NAME\n3.DISPLAY RANK IN ASCENDING ORDER\nENTER UR  CHOICE : ");
+  c=Integer.parseInt(br.readLine());
+  switch(c)
+  { 
+   case 1:
+		System.out.print("\nENTER THE NUMBER OF STUDENTS : ");
+		int t=Integer.parseInt(br.readLine());
+		
+                for(int i=0;i<t;i++)
+		{
+		 System.out.println("\nENTER ROLL : ");
+		 int rno=Integer.parseInt(br.readLine());	
+		 System.out.println("\nENTER NAME : ");
+		 String a=br.readLine();
+		 System.out.println("\nENTER RANK : ");
+		 int r=Integer.parseInt(br.readLine());
+		
+		 theTree.insert(rno,r,a);
+		}
+		break;
+ 
+   case 2:
+		System.out.print("\nENTER THE RANK OF THE STUDENT TO B SEARCHED : ");
+		int key=Integer.parseInt(br.readLine());
+		theTree.find(key);
+		break;
+
+   case 3:
+                
+  	        System.out.println("RANK LIST IN ASCENDING ORDER IS : ");
+		theTree.traverse();
+		break;
+   
+   default:
+		System.out.println("\nWRONG CHOICE!!!");
+  }
+  System.out.print("\nENTER Y TO CONTINUE : ");
+  ch=(char)br.read();
+ }
+}
+}
+
+
+//PROGRAM 15
+
+    import java.io.*;  
+    class Node  
+    {  
+     public int data;  
+     public Node lChild;  
+     public Node rChild;  
+     public boolean lTag;  
+     public boolean rTag;  
+     public Node(int x)  
+     {  
+      data=x;  
+     }  
+     public Node()  
+     {  
+      lTag=true;  
+      rTag=false;  
+     }  
+     public void displayNode()  
+     {  
+      System.out.print(data+"  ");  
+     }  
+    }  
+    class ThreadedTree  
+    {  
+     private Node header;  
+     public ThreadedTree()  
+     {  
+      header=new Node();  
+      header.lChild=header;  
+      header.rChild=header;  
+     }  
+     public void insert(int id)  
+     {  
+      Node xPtr=getNode(id);  
+      Node newNode=new Node(id);  
+      if(xPtr==header)  
+      {  
+         
+       newNode.lChild=header;  
+       newNode.rChild=header;  
+       newNode.lTag=true;  
+       newNode.rTag=true;  
+       header.lTag=false;  
+       header.lChild=newNode;  
+      }  
+      else if(id<xPtr.data)  
+      {  
+       newNode.lChild=xPtr.lChild;  
+       newNode.rChild=xPtr;  
+       newNode.lTag=true;  
+       newNode.rTag=true;  
+       xPtr.lTag=false;  
+       xPtr.lChild=newNode;  
+      }  
+      else  
+      {  
+       newNode.rChild=xPtr.rChild;  
+       newNode.lChild=xPtr;  
+       newNode.lTag=true;  
+       newNode.rTag=true;  
+       xPtr.rTag=false;  
+       xPtr.rChild=newNode;  
+      }  
+     }  
+     private Node getNode(int id)  
+     {  
+      Node ptr=header;  
+      Node parent=ptr;  
+      ptr=insucc(ptr);  
+      if(ptr!=header)  
+      {  
+       if(id>=ptr.data)  
+       {  
+        while(true)  
+        {  
+         parent=ptr;  
+         ptr=insucc(ptr);  
+           
+         if(ptr==header)  
+          break;  
+         if(id<ptr.data)  
+         {  
+          if(parent.rTag)  
+           ptr=parent;  
+          break;  
+         }  
+        }  
+       }  
+      }  
+      if(ptr==header&&!header.lTag)  
+       return parent;  
+      return ptr;  
+     }  
+     private Node insucc(Node ptr)  
+     {  
+      Node succ=ptr.rChild;  
+      if(ptr.rTag==false)  
+      {  
+       while(succ.lTag==false)  
+        succ=succ.lChild;  
+      }  
+      return succ;  
+     }  
+     public void traverse()  
+     {  
+      System.out.print("Inorder Traversal:-     ");  
+      inOrder(header);  
+      System.out.println("");  
+     }  
+     private void inOrder(Node ptr)  
+     {  
+        
+      while(true)  
+      {  
+       ptr=insucc(ptr);  
+       if(ptr==header)  
+        break;  
+       ptr.displayNode();  
+      }  
+     }  
+       
+    }  
+    class ThreadedApp  
+    {  
+     public static void main(String args[])throws IOException  
+     {  
+      String ch="y";  
+      DataInputStream inp=new DataInputStream(System.in);  
+      ThreadedTree t=new ThreadedTree();  
+      while(ch.equals("y"))  
+      {  
+       System.out.println("Menu");  
+       System.out.println("--------");  
+       System.out.println("1.Insert");  
+       System.out.println("2.Display");  
+       System.out.println("Enter your choice ");  
+       int n=Integer.parseInt(inp.readLine());  
+       switch(n)  
+       {  
+        case 1: while(ch.equals("y"))  
+          {  
+           System.out.println("Enter the data");  
+           int a=Integer.parseInt(inp.readLine());  
+           t.insert(a);  
+           System.out.print("Enter y to continue inserting");  
+           ch=inp.readLine();  
+          }  
+          break;  
+        case 2: System.out.println("Tree Elements");  
+          System.out.println("-------------");  
+          t.traverse();  
+          break;  
+        default:System.out.println("Invalid Choice");  
+       }  
+       System.out.println("");  
+       System.out.print("Enter y to continue ");  
+       ch=inp.readLine();  
+      }  
+     }  
+    }  
+
+
+//PROGRAM 16
+
+    import java.io.*;  
+    class Stack  
+    {  
+     private int size;  
+     private int[] st;  
+     private int top;  
+     public Stack(int s)  
+     {  
+      size=s;  
+      st=new int[size];  
+      top=-1;  
+     }  
+     public void push(int key)  
+     {  
+      st[++top]=key;  
+     }  
+     public int pop()  
+     {  
+      return(st[top--]);  
+     }  
+     public int peek()  
+     {  
+      return(st[top]);  
+     }  
+     public boolean isEmpty()  
+     {  
+      return (top==-1);  
+     }  
+    }  
+    class Queue  
+    {  
+     private int size;  
+     private int[] queArray;  
+     private int front;  
+     private int rear;  
+     public Queue(int s)  
+     {  
+      size=s;  
+      queArray=new int[size];  
+      front=0;  
+      rear=-1;  
+     }  
+     public void insert(int j)  
+     {  
+      if(rear==size-1)  
+       rear=-1;  
+      queArray[++rear]=j;  
+     }  
+     public int remove()  
+     {  
+      int temp=queArray[front++];  
+      if(front==size)  
+       front=0;  
+      return temp;  
+     }  
+     public boolean isEmpty()  
+     {  
+      return(rear+1==front||(front+size-1==rear));  
+     }  
+    }  
+    class Vertex  
+    {  
+     public char label;  
+     public boolean wasVisited;  
+     public Vertex(char lab)  
+     {  
+      label=lab;  
+      wasVisited=false;  
+     }  
+    }  
+    class Graph  
+    {  
+     private int maxVertex;  
+     private Vertex vertexList[];  
+     private int adjMat[][];  
+     private int nVert;  
+     private Stack theStack;  
+     private Queue theQueue;  
+     public Graph(int s)  
+     {  
+      maxVertex=s;  
+      vertexList=new Vertex[maxVertex];  
+      adjMat=new int[maxVertex][maxVertex];  
+      nVert=0;  
+      for(int j=0;j<maxVertex;j++)  
+       for(int k=0;k<maxVertex;k++)  
+        adjMat[j][k]=0;  
+      theStack=new Stack(s);  
+      theQueue=new Queue(s);  
+     }  
+     public void addVertex(char lab)  
+     {  
+      if(nVert==maxVertex)  
+       System.out.println("Vertex limit exceeded ");  
+      else  
+       vertexList[nVert++]=new Vertex(lab);  
+     }  
+     public void addEdge(char start,char end)  
+     {  
+      int i,j;  
+      for(j=0;j<nVert;j++)  
+       if(vertexList[j].label==start)  
+        break;  
+      for(i=0;i<nVert;i++)  
+       if(vertexList[i].label==end)  
+        break;  
+      if(i==nVert||j==nVert)  
+       System.out.println("Vertex not found");  
+      else  
+      {  
+       adjMat[j][i]=1;  
+       adjMat[i][j]=1;  
+      }  
+     }  
+     public void displayVertex(int v)  
+     {  
+      System.out.print(vertexList[v].label);  
+     }  
+     public void dfs()  
+     {  
+      vertexList[0].wasVisited=true;  
+      displayVertex(0);  
+      theStack.push(0);  
+      while(!theStack.isEmpty())  
+      {  
+       int v=getAdjUnvisitedVertex(theStack.peek());  
+       if(v==-1)  
+        theStack.pop();  
+       else  
+       {  
+        vertexList[v].wasVisited=true;  
+        displayVertex(v);  
+        theStack.push(v);  
+       }  
+      }  
+      for(int j=0;j<nVert;j++)  
+       vertexList[j].wasVisited=false;  
+     }  
+     public void bfs()  
+     {  
+      vertexList[0].wasVisited=true;  
+      displayVertex(0);  
+      theQueue.insert(0);  
+      int v2;  
+      while(!theQueue.isEmpty())  
+      {  
+       int v1=theQueue.remove();  
+       while((v2=getAdjUnvisitedVertex(v1))!=-1)  
+       {  
+        vertexList[v2].wasVisited=true;  
+        displayVertex(v2);  
+        theQueue.insert(v2);  
+       }  
+      }  
+      for(int j=0;j<nVert;j++)  
+       vertexList[j].wasVisited=false;  
+     }  
+     private int getAdjUnvisitedVertex(int v)  
+     {  
+      for(int j=0;j<nVert;j++)  
+       if(adjMat[v][j]==1&&vertexList[j].wasVisited==false)  
+        return j;  
+       return -1;  
+     }  
+    }  
+    class GraphApp  
+    {  
+     public static void main(String args[])throws IOException  
+     {  
+      String ch="y";  
+      DataInputStream inp=new DataInputStream(System.in);  
+      System.out.println("Enter the limit of vertexes");  
+      int max=Integer.parseInt(inp.readLine());  
+      Graph g=new Graph(max);  
+      while(ch.equals("y"))  
+      {  
+       System.out.println("Menu");  
+       System.out.println("--------");  
+       System.out.println("1.Add Vertex");  
+       System.out.println("2.Add Edge");  
+       System.out.println("3.DFS");  
+       System.out.println("4.BFS");  
+       System.out.println("Enter your choice ");  
+       int n=Integer.parseInt(inp.readLine());  
+       switch(n)  
+       {  
+        case 1: while(ch.equals("y"))  
+          {  
+           System.out.println("Enter the vertex");  
+           String s=inp.readLine();  
+           char a=s.charAt(0);  
+           g.addVertex(a);  
+           System.out.print("Enter y to continue inserting");  
+           ch=inp.readLine();  
+          }  
+          break;  
+        case 2:  while(ch.equals("y"))  
+          {  
+           System.out.println("Enter the edge");  
+           String s=inp.readLine();  
+           g.addEdge(s.charAt(0),s.charAt(1));  
+           System.out.print("Enter y to continue inserting");  
+           ch=inp.readLine();  
+          }  
+          break;  
+        case 3:System.out.println("DFS");  
+          System.out.println("-------------");  
+          g.dfs();  
+          System.out.println("");  
+          break;  
+        case 4: System.out.println("BFS");  
+          System.out.println("-------------");  
+          g.bfs();  
+          System.out.println("");  
+          break;  
+        default:System.out.println("Invalid Choice");  
+       }  
+       System.out.println("");  
+       System.out.print("Enter y to continue ");  
+       ch=inp.readLine();  
+      }  
+     }  
+    }
+
+
+//PROGRAM 17
+
+import java.io.*;
+class Sort
+{
+ private int[] a;
+ private int nElems;
+ 
+ public Sort(int max)
+ {
+  a=new int[max];
+  nElems=0;
+ }
+
+ public void insert(int value)
+ {
+  a[nElems]=value;
+  nElems++;
+ }
+
+ public void display()
+ {
+  for(int j=0;j<nElems;j++)
+   System.out.print(a[j]+" ");
+  System.out.println(" ");
+ }
+
+ public void swap(int one,int two)
+ {
+  int temp=a[one];
+  a[one]=a[two];
+  a[two]=temp;
+ }
+
+ public void bubbleSort()
+ {
+  int out,in;
+  for(out=nElems-1;out>1;out--)
+   for(in=0;in<out;in++)
+    if(a[in]>a[in+1])
+     swap(in,in+1);
+ }
+
+ public void selectionSort()
+ {
+  int out,in,min;
+  for(out=0;out<nElems;out++)
+  {
+   min=out;
+   for(in=out+1;in<nElems;in++)
+    if(a[in]<a[min])
+     min=in;
+   swap(out,min);
+  }
+ }
+
+ public void insertionSort()
+ {
+  int in,out;
+  for(out=1;out<nElems;out++)
+  {
+   int temp=a[out];
+   in=out;
+   while(in>0&&a[in-1]>=temp)
+   {
+    a[in]=a[in-1];
+    --in;
+   }
+   a[in]=temp;
+  }
+ }
+
+
+ public void quickSort()
+ {
+  recQuickSort(0,nElems-1);
+ }
+
+
+ public void recQuickSort(int left,int right)
+ {
+  if(right-left<=0)
+   return;
+  else
+  {
+   int pivot=a[right];
+   int partition=partitionIt(left,right,pivot);
+   recQuickSort(left,partition-1);
+   recQuickSort(partition+1,right);
+  }
+ }
+
+ public int partitionIt(int left,int right,int pivot)
+ {
+  int leftPtr=left-1;
+  int rightPtr=right;
+  while(true)
+  {
+   while(a[++leftPtr]<pivot)
+    ;
+   while(rightPtr>0&&a[--rightPtr]>pivot)
+    ;
+   if(leftPtr>=rightPtr)
+      break;
+   else
+      swap(leftPtr,rightPtr);
+  }
+  swap(leftPtr,right); 
+  return(leftPtr);
+ }
+}
+
+
+class SortApp
+{
+ public static void main(String args[])throws IOException
+ {
+  char ch='y';
+  int maxsize=100;
+  Sort s=new Sort(maxsize);
+  InputStreamReader obj=new InputStreamReader(System.in);
+  BufferedReader BR=new BufferedReader(obj);
+  System.out.println("ENTER THE NUMBER OF ELEMENTS : ");
+  int m=Integer.parseInt(BR.readLine());
+  System.out.println("ENTER THE ELEMENTS : ");
+  for(int i=0;i<m;i++)
+  {
+    int d=Integer.parseInt(BR.readLine());
+    s.insert(d);
+  } 
+   
+  while(ch=='y'||ch=='Y')
+  {
+   InputStreamReader isr=new InputStreamReader(System.in);
+   BufferedReader br=new BufferedReader(isr);
+   System.out.println("SORTING :-\n1.QUICK\n2.SELECTION\n3.INSERTION\n4.BUBBLE\nENTER UR CHOICE : ");
+   int n=Integer.parseInt(br.readLine());
+   switch(n)
+   {
+    case 1:
+	s.quickSort();
+        System.out.println("THE ARRAY AFTER SORTING USING QUICK SORT IS : ");
+        s.display();
+	break;
+    case 2:
+	s.selectionSort();
+	System.out.println("THE ARRAY AFTER SORTING USING SELECTION SORT IS : ");
+        s.display();
+	break;
+    case 3:
+	s.insertionSort();
+	System.out.println("THE ARRAY AFTER SORTING USING INSERTION SORT IS : ");
+        s.display();
+	break;
+    case 4:
+	s.bubbleSort();
+	System.out.println("THE ARRAY AFTER SORTING USING BUBBLE SORT IS : ");
+        s.display();
+	break;
+    default:
+	System.out.println("WRONG CHOICE!!!"); 
+   }
+   System.out.print("ENTER Y TO CONTINUE : ");
+   ch=(char)br.read();
+  }
+ }
+}
+
+
+//PROGRAM 18
+
+import java.io.*;
+class OrdArray
+{
+ private int[] a;
+ private int nElems;
+ public OrdArray(int max)
+ {
+  a=new int[max];
+  nElems=0;
+ }
+ 
+ public int size()
+ { return nElems; }
+  
+ public int find(int searchkey)
+ {
+  int lb=0,ub=nElems-1,curIn;
+  while(true)
+  {
+   curIn=(lb+ub)/2;
+   if(a[curIn]==searchkey)
+    return curIn;
+   else if(lb>ub)
+    return nElems;
+   else 
+   {
+    if(a[curIn]<searchkey)
+     lb=curIn+1;
+    else 
+     ub=curIn-1;
+   }
+  }
+ }
+
+ public void insert(int value)
+ {
+  int j;
+  for(j=0;j<nElems;j++) 
+   if(a[j]>value)
+     break;
+   for(int k=nElems;k>j;k--)
+    a[k]=a[k-1];
+  a[j]=value;
+  nElems++;
+ }
+
+ public void display()
+ { 
+  
+  for(int j=0;j<nElems;j++)
+   System.out.print(a[j]+" ");
+  System.out.println(" ");
+ }
+}
+ 
+
+class OrderedApp
+{
+ public static void main(String[] args)throws IOException
+ {
+  InputStreamReader obj=new InputStreamReader(System.in);
+  BufferedReader br=new BufferedReader(obj);
+  int maxSize=100,n,searchkey;
+  OrdArray arr;
+  arr=new OrdArray(maxSize);
+  
+  
+
+  System.out.println("ENTER THE  LIMIT OF THE ARRAY: ");
+  n=Integer.parseInt(br.readLine());
+
+  int b[]=new int[n];
+
+  System.out.println("ENTER THE ARRAY ELEMENTS : ");
+ 
+  
+  for(int i=0;i<n;i++)
+  {
+   b[i]=Integer.parseInt(br.readLine());
+   arr.insert(b[i]);
+  }
+
+   arr.display();
+ 
+  System.out.println("ENTER THE  ELEMENT TO BE SEARCHED : ");
+  searchkey=Integer.parseInt(br.readLine());
+
+
+  if(arr.find(searchkey)!=arr.size())
+   System.out.println("FOUND"+searchkey);
+  else
+   System.out.println("CAN'T FIND"+searchkey);
+ 
+ }
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+

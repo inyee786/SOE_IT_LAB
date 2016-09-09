@@ -1,0 +1,51 @@
+DIVISION OF INFORMATION TECHNOLOGY
+IT 13L2 OBJECT ORIENTED PROGRAMMING LAB
+
+PRACTICE QUESTIONS
+
+CYCLE I
+1.Write a program to read the details of students (say name, age, gender, marks of 3 subjects , attendance) and compute the total mark. Use structures.
+
+2.Write a program to read the details of  students (say name, age, gender, marks of 3 subjects, attendance) and compute the total mark. Use class.
+
+3.Define a class DATA with data members d- an integer array and count- static int. Write appropriate functions to input data into the array member and to count the no. of positives elements in all objects of class data.
+
+4.Define a class CLOCK with data members for hour, minute, second. Write constructors to initialize the clock using overloaded constructors
+
+5..Define a class CLOCK with data members for hour, minute, second. Write constructors to initialize the clock using FRIEND function
+
+6.Write a C++ program to create a class called COMPLEX and implement the following overloading functions ADD that return a COMPLEX number. 
+i. ADD (a, s2) – where ‘a’ is an integer (real part) and s2 is a complex number. 
+ii. ADD (s1, s2) – where s1 and s2 are complex numbers. 
+
+7.Write a program to find the area of different shaped polygons like triangle, rectangle, square and circle using function overloading.
+
+8. In a class distance is measured in feet and inches unit. Use operator overloading, + operator for adding two distances and < operator for comparing two distances(implement operator functions as friend functions).
+
+9.A class representing distance measured in the unit of feet and inches. Write a program to do the conversion from meters to object of class type and object of class type to meters.
+
+10.Polar cordiantes are represented in angle and radius format while rectangular co-ordinates as(x,y). Define a class for both and write member functions to convert from polar to rectangular cordinates.
+
+
+
+CYCLE II
+
+11.Write a C++ program to create a class called STUDENT with data members roll number, Name and Age. Using inheritance, create the classes UGSTUDENT and PGSTUDENT having fields as Semester, Fees and Stipend. Enter the data for at least 5 students. Find the semester wise average age for all UG and PG students separately.
+
+12.Define a hybrid inheritance structures which will print the result as a cumulative score from test and sports. Each class should have its own constructors.
+
+13.Define a multipath inheritance structure in which the class master deserves information from both account and admin classes which in turn derive information from the class person. Define all four classes and write a program to create, update, and display the information contained in master objects.
+
+14.Create a base class called student. Use the class to store the name, dob, rollno and includes member functions getdata(), displayresult(). Derive two class pg and ug from student. Make dispalyresult() as virtual function and redefine this function in the derived class to suite the requirements.
+
+15.Implement the base class polygon and derive triangle, rectangle and square classes from it. Implement functions to compute area and perimeter of the polygon. Use the concept of pure virtual functions.
+
+16.Write a C++ program to create a class called LIST (linked list) with member functions to insert an element at the front as well as to delete an element from the front of the list. Demonstrate all the functions after creating a list object. (Use ‘NEW’ and ‘DELETE’ operators)
+
+17.Write a menu driven program to do the following operations on a string:
+a) insert a string after a word 			b) delete a substring
+c) replace a substring				d) change the case of a substring. 
+
+18.Define a STUDENT class with Roll Number, Name and Marks in 3 tests of a subject. Using appropriate functions to i) write the student records in a file, ii) read from a file and display, iii)search for a student in the file,  iv) modify the record and   v)delete a record 
+
+19.Write a C++ program to create a template function for Quick sort and demonstrate sorting of integers and doubles.

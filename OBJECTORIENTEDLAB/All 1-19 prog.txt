@@ -1,0 +1,1640 @@
+
+//Program-1// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+struct student
+{
+	char name[50],gender[10];
+    int age,sub1,sub2,sub3,total;	
+};
+int main()
+{
+	int i,n;
+	struct student st[50];
+	cout<<"enter the no of students";
+	cin>>n;
+	for(i=0;i<n;i++)
+	{
+	cout<<"   enter the NAME of student :  ";
+	cin>>st[i].name;
+	cout<<"   enter the GENDER          :  ";
+	cin>>st[i].gender;
+	cout<<"   enter your AGE            :  ";
+	cin>>st[i].age;
+	cout<<"enter mark of three SUBJECTS :  ";
+	cin>>st[i].sub1>>st[i].sub2>>st[i].sub3;
+	st[i].total=st[i].sub1+st[i].sub2+st[i].sub3;
+	}
+	cout<<endl<<" TOTAL mark of "<<st[i].name <<"  is   " <<st[i].total<<endl;
+	for(i=0;i<n;i++)
+	{	
+	cout<<endl<<" name\t age\tgender\tsub1\tsub2\tsub3\ttotal "<<endl;
+	cout<<st[i].name <<"\t" << st[i].age<<"\t" <<st[i].gender<<"\t"<<st[i].sub1<<"\t" <<st[i].sub2<<"\t"<<st[i].sub3
+	<<"\t"<<st[i].total<<endl;
+	}
+	}
+
+
+
+
+
+//Progrm-2// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+
+class student
+{
+	char name[50];
+	int age;
+	char sex;
+	float m1,m2,m3,tot;
+	
+	public:
+	
+		void input();
+		void calc();
+		void disp();
+		void output();
+};
+
+void student::input()
+{
+			cout<<"Enter the name of the student:";
+			cin>>name;
+	
+			cout<<"Enter the age:";
+			cin>>age;
+	
+			cout<<"Enter the sex:";
+			cin>>sex;
+		
+			cout<<"Enter marks of 3 subjects\n"<<"m1=";
+			cin>>m1;
+		
+			cout<<"m2=";
+			cin>>m2;
+		
+			cout<<"m3=";
+			cin>>m3;
+}
+
+	void student::calc()
+	{
+		tot=m1+m2+m3;
+	}
+	
+	void student::disp()
+	{
+	
+		cout<<"\nName:";
+	
+		cout<<"\tAge:";
+	
+		cout<<"\tSex:";
+	
+		cout<<"\tm1";
+	
+		cout<<"\tm2";
+	
+		cout<<"\tm3";
+	
+		cout<<"\tTotal";
+	
+		cout<<"\n";
+	}
+	
+	void student::output()
+	{
+		
+		cout<<name;
+	
+		cout<<"\t"<<age;
+		
+		cout<<"\t"<<sex;
+	
+		cout<<"\t"<<m1;
+		
+		cout<<"\t"<<m2;
+	
+		cout<<"\t"<<m3;
+	
+		cout<<"\t"<<tot<<"\n";
+	
+	}
+	
+	int main()
+	{
+		student s[10];
+		int i,n;
+		cout<<"Enter the total number of students:";
+		cin>>n;
+		
+		
+		for(i=1;i<=n;i++)
+		{
+			s[i].input();
+			s[i].calc();
+		}
+		s[i].disp();
+		
+		for(i=1;i<=n;i++)
+		s[i].output();
+		
+		 
+	}
+
+
+
+
+
+
+//Program-3// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+
+class DATA
+{
+	int d[20];
+	static int c;
+	
+	public:
+	void input(int n);
+	void disp();	
+};
+
+int DATA::c;
+
+void DATA::input(int n)
+{
+	cout<<"Enter the array elements\n";
+	
+	for(int i=0;i<n;i++)
+	{
+		cin>>d[i];
+		
+		if(d[i]>0)
+		c++;
+	}
+}
+
+void DATA::disp()
+{
+	cout<<"Number of positive terms="<<c<<"\n";
+}
+
+main()
+{
+	DATA d1,d2;
+	int n;
+	
+	cout<<"Enter the size of the array:";
+	cin>>n;
+	
+	d1.input(n);
+	d2.input(n);
+	d1.disp();
+	
+	return 0;
+}
+
+
+
+
+
+
+//Program-4// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+class CLOCK
+{
+	int h,m,s;
+	public:
+	CLOCK();
+	CLOCK(int a,int b,int c);
+	void disp();
+};
+CLOCK::CLOCK()
+{
+	h=m=s=0;
+}
+CLOCK::CLOCK(int a,int b,int c)
+{
+	h=a;
+	m=b;
+	s=c;
+}
+void CLOCK::disp()
+{
+	cout<<"\n h="<<h<<"\n m="<<m<<"\n s=";
+	cout<<s<<"\n";
+}
+int main()
+{
+	CLOCK C1=CLOCK();
+	CLOCK C2=CLOCK(2,45,56);
+	C1.disp();
+	C2.disp();
+	return 0;
+}
+
+
+
+
+
+
+//Program-5// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+
+class CLOCK
+{
+	int h,m,s;
+	
+	public:
+	CLOCK()
+	{
+		h=m=s=0;
+	}
+	void input();	
+	friend void add(CLOCK,CLOCK);
+};
+
+void CLOCK::input()
+{
+	cout<<"Enter the time\n";
+	cout<<"h=";
+	cin>>h;
+	cout<<"m=";
+	cin>>m;
+	cout<<"s=";
+	cin>>s;
+}
+
+void add (CLOCK c1, CLOCK c2)
+{
+	CLOCK c3;
+	c3.s=c1.s+c2.s;
+	if(c3.s>=60)
+	{
+		c3.s=c3.s-60;
+		c3.m++;
+	}	
+	c3.m=c3.m+c1.m+c2.m;
+	
+	if(c3.m>=60)
+	{
+		c3.m=c3.m-60;
+		c3.h++;
+	}
+	c3.h=c3.h+c1.h+c2.h;
+	cout<<"\nh="<<c3.h<<"\nm="<<c3.m<<"\ns="<<c3.s<<"\n";
+	
+
+}
+
+main()
+{
+	CLOCK c1,c2,c3;
+	c1.input();
+	c2.input();
+	add(c1,c2);
+	return 0;
+}
+
+
+
+
+
+
+//Program-6// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+class comp
+{
+	float x,y;
+	public:
+	comp ()
+	{
+	x=0;y=0;	
+	}
+	
+		comp (float a,float b)
+		{
+			x=a;
+			y=b;
+		}
+		friend void sum(float,comp);
+		friend void sum(comp,comp);
+};
+	void sum(float s,comp c5)
+	{
+		comp c6;
+		c6.x=s+c5.x;
+		c6.y=c5.y;
+		cout<<"sum="<< c6.x <<"+"<<c6.y<<"j\n";
+	}
+	void sum(comp c2,comp c4)
+		{
+		comp c3;
+		c3.x=c2.x+c4.x;
+		c3.y=c2.y+c4.y;
+		cout <<"sum ="<< c3.x <<"+"<<c3.y<<"j\n";
+	}
+	
+int main()
+{
+	comp a(-2.7,-3.5);
+	comp b(-1.6,-1.6);
+	sum (a,b);
+	sum (10.1,a);
+	return(0);
+}
+
+
+
+
+
+
+//Program-7// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+void area(float,float,float);
+void area(float,float);
+void area(float);
+void area(int);
+
+void area(float a,float b,float c)
+{
+	double q=0,s=0;
+	s=(a+b+c)/2;
+	q=sqrt(s*(s-a)*(s-b)*(s-c));
+	cout<<"Area of the Triangle="<<q;
+}
+
+void area(float a,float b)
+{
+	float q=0;
+	q=a*b;
+	cout<<"Area of the Rectangle="<<q;
+}
+
+void area(float a)
+{
+	float q=0;
+	q=a*a;
+	cout<<"Area of the Square="<<q;	
+}
+
+void area(int a)
+{
+	float q=0;
+	q=3.14*a*a;
+	cout<<"Area of the Circle="<<q;
+}
+
+main()
+{
+	char op='y';
+	int opt,r;
+	float a,b,c;
+	do
+	{
+		cout<<"Select an option\n1.Triangle\n2.Rectangle\n3.Square\n4.Circle\n";
+		cin>>opt;
+		switch(opt)
+		{
+			case 1:
+				cout<<"Enter the sides of the Triangle\n";
+				cout<<"a=";
+				cin>>a;
+				cout<<"b=";
+				cin>>b;
+				cout<<"c=";
+				cin>>c;
+				area(a,b,c);
+				break;
+				
+			case 2:
+				cout<<"Enter the sides of the Rectangle\n";
+				cout<<"l=";
+				cin>>a;
+				cout<<"b=";
+				cin>>b;
+				area(a,b);
+				break;
+				
+			case 3:
+				cout<<"Enter the side of the Square\n";
+				cout<<"a=";
+				cin>>a;
+				area(a);
+				break;
+				
+			case 4:
+				cout<<"Enter the radius of the circle\n";
+				cout<<"r=";
+				cin>>r;
+				area(r);
+				break;
+				
+			default:
+				cout<<"Invalid option";
+				break;
+		}
+		cout<<"\nDo you want to continue(y/n)";
+		cin>>op;
+	}while(op=='y');
+return 0;
+}
+
+
+
+
+
+
+//Program-8// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+
+class dist
+{
+	float ft,in;
+	
+	public:
+	dist();
+	void input();
+	void disp();
+	friend dist operator+(dist,dist);
+	friend int operator<(dist,dist);
+};
+
+dist::dist()
+{
+	ft=in=0.0;
+}
+
+void dist::input()
+{
+	cout<<"Enter the distance\n";
+	cout<<"feet:";
+	cin>>ft;
+	cout<<"inch:";
+	cin>>in;
+}
+
+void dist::disp()
+{
+	cout<<"\nfeet:"<<ft;
+	cout<<"\ninch:"<<in<<"\n";
+}
+
+dist operator+(dist d1,dist d2)
+{
+	dist d;
+	d.ft=d1.ft+d2.ft;
+	d.in=d1.in+d2.in;
+	while(d.in>=12.0)
+	{
+		d.ft++;
+		d.in=d.in-12.0;	
+	}
+	return d;	
+}
+
+int operator<(dist d1,dist d2)
+{
+	float a,b;
+	a=d1.ft+((d1.in/12.0));
+	b=d2.ft+((d2.in/12.0));
+	
+	if(a<b)
+	return 1;
+	
+	else
+	return 0;
+}
+
+main()
+{
+	dist d1,d2,d3;
+	d1.input();
+	d2.input();
+	d3=d1+d2;
+	cout<<"Sum:\n";
+	d3.disp();
+	cout<<"\nSmallest:\n";
+	if(d1<d2)
+	d1.disp();
+	
+	else 
+	d2.disp();
+	
+	return 0;
+}
+
+
+
+
+
+//Program-9// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+const float MTF=3.280833;
+class dist
+{
+	private:
+	int feet;
+	float inches;
+	public:
+	dist()
+	{
+		feet=0;inches=0.0;
+	}
+	dist(float meters)
+	{
+		float ftfeet=MTF*meters;
+		feet=int(ftfeet);
+		inches=12*(ftfeet-feet);
+	}
+	dist(int ft,float in)
+	{
+		feet=ft;inches=in;
+	}
+	void getdist()
+	{
+		cout<<"\n Enter inches:";
+		cin>>inches;
+	}
+	void showdist()
+	{
+		cout<<feet<<"ft"<<inches<<"inch";
+	}
+	operator float()
+	{
+		float fracfeet=inches/12;
+		fracfeet+=float(feet);
+		return fracfeet/MTF;
+	}
+};
+main()
+{
+	dist d1(1.0);
+	cout<<"\nd1=";
+	d1.showdist();
+	dist d2(3,3.37);
+	float mtrs=float(d2);
+	cout<<"\nd2="<<mtrs<<"meters";
+}
+
+
+
+
+
+
+//Program-10// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+#include<math.h>
+using namespace std;
+class Rec
+{
+	private:
+	double xco;
+	double yco;
+	public:
+	Rec()
+	{
+		xco=0.0;yco=0.0;
+	}
+	Rec(double x,double y)
+	{
+		xco=x;yco=y;
+	}
+	void display()
+	{
+		cout<<"("<<xco<<","<<yco<<")";
+	}
+};
+class polar
+{
+	private:
+	double radius;
+	double angle;
+	public:
+	polar()
+	{
+		radius=0.0;angle=0.0;
+	}
+	polar(double r,double a)
+	{
+		radius=r;angle=a;
+	}
+	void display()
+	{
+		cout<<"("<<radius<<","<<angle<<")";
+	}
+	operator Rec()
+	{
+		double x=radius*cos(angle);
+		double y=radius*sin(angle);
+		return Rec(x,y);
+	}
+};
+main()
+{
+	Rec rec;
+	polar pol(10.0,0.785398);
+	rec=Rec(pol);
+	cout<<"\n polar=";pol.display();
+	cout<<"\n rectangular=";rec.display();
+}
+
+
+
+
+
+
+//Program-11// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream.h>
+#include<conio.h>
+
+class Student
+{
+	protected:
+	int usn,age;
+	char name[20];
+
+};
+
+class Ug : public Student
+{
+	int sem,fee,sti;
+
+	public:
+	void getdata()
+	{
+		cout<<"\nEnetr Usn , Name , Age : ";
+		cin>>usn>>name>>age;
+		cout<<"\nEnter Sem,Fee,Stipend : ";
+		cin>>sem>>fee>>sti;
+	}
+
+	void display()
+	{
+		cout<<name<<"\t"<<age<<"\t"<<sem<<"\n";
+	}
+
+	int getsem()
+	{
+		return(sem);
+	}
+
+	int getage()
+	{
+		return(age);
+	}
+
+};
+
+class Pg : public Student
+{
+	int sem,fee,sti;
+
+	public:
+	void getdata()
+	{
+		cout<<"\nEnetr Usn , Name , Age : ";
+		cin>>usn>>name>>age;
+
+		cout<<"\nEnter Sem,Fee,Stipend : ";
+		cin>>sem>>fee>>sti;
+	}
+
+	void display()
+	{
+		cout<<name<<"\t"<<age<<"\t"<<sem<<"\n";
+	}
+
+	int getsem()
+	{
+		return(sem);
+	}
+
+	int getage()
+	{
+		return(age);
+	}
+
+};
+
+int main()
+{
+	clrscr();
+
+	Pg p[2];
+	Ug u[2];
+
+	int flag,age,sem,agesum=0,semcnt=0,j,i;
+
+	cout<<"\n\nEnter Pg students details..\n";
+	for(i=0; i<2; i++ )
+		p[i].getdata();
+
+	cout<<"\n\nEnter Ug students details..\n";
+	for(i=0; i<2; i++ )
+		u[i].getdata();
+
+	cout<<"\nUG - students details..\n";
+	cout<<"--------------------------\n";
+	cout<<"Name\tAge\tSem\n";
+	for(i=0; i<2; i++ )
+		u[i].display();
+	cout<<"--------------------------\n";
+	for(i=1; i<9; i++ )
+	{
+		flag=0;
+		for(j=0; j<2; j++ )
+		{
+			sem=u[j].getsem();
+			age=u[j].getage();
+
+			if( i==sem )
+			{
+				agesum+=age;
+				semcnt++;
+				flag=1;
+			}
+		}
+	if(flag)
+	   cout<<i<<"\t"<<agesum/semcnt<<endl;
+}
+
+	agesum=0,semcnt=0;
+
+	cout<<"\n\nPG - students details..\n";
+	cout<<"--------------------------\n";
+	cout<<"Name\tAge\tSem\n";
+	for(i=0; i<2; i++ )
+		p[i].display();
+	cout<<"--------------------------\n";
+	for(i=1; i<9; i++ )
+	{
+		flag=0;
+		for(j=0; j<2; j++ )
+		{
+			sem=p[j].getsem();
+			age=p[j].getage();
+
+			if( i==sem )
+			{
+				agesum+=age;
+				semcnt++;
+				flag=1;
+			}
+		}
+			if(flag)
+			cout<<i<<"\t"<<agesum/semcnt<<endl;
+	}
+
+	getch();
+	return 0;
+
+}
+
+
+
+
+
+
+//Program-12// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+class student
+{
+	protected:
+    int rno;
+    public:
+    student()
+    {
+    	rno=0;
+    }
+    void get_no(int a)
+	{
+		rno=a;
+	}
+	void put_no()
+	{
+		cout<<"Roll No : "<<rno;
+	}
+};
+class test : public student
+{
+	protected:
+	float sub1,sub2;
+	public:
+	test()
+	{
+		sub1=0;sub2=0;
+	}
+	void get_marks(float x,float y)
+	{
+		sub1=x;sub2=y;
+	}
+	void put_marks()
+	{
+		cout<<"\nsub1 = "<<sub1;
+		cout<<"\nsub2 = "<<sub2;
+	}
+};
+class sports
+{
+	protected:
+	float score;
+	public:
+	sports()
+	{
+		score=0;
+	}
+	void get_score(float s)
+	{
+		score=s;
+	}
+	void put_score()
+	{
+		cout<<"\nSport wt = "<<score;
+	}
+};
+class result:public test,public sports
+{
+	float total;
+	public:
+	result ()
+	{
+		total =0;
+	}
+	void display()
+	{
+		total=sub1+sub2+score;
+		put_no();
+		put_marks();
+		put_score();
+		cout<<"\nTotal = "<<total;
+	}
+};
+int main()
+{
+	result s;
+	s.get_no(14140042);
+	s.get_marks(87.9,94.0);
+	s.get_score(8.0);
+	s.display();
+}
+
+
+
+
+
+
+//Program-13// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+
+struct dob
+{
+	int d,m,y;
+};
+
+class person
+{
+	protected:
+		char name[50];
+		int age;
+};
+
+class account:virtual public person
+{
+	protected:
+		float acno;	
+};
+
+class admin:virtual public person
+{
+	protected:
+			dob dd;
+};
+
+class master:public account,admin
+{
+	public:
+		void input();
+		void display();
+		int update(float,int);
+}m[10];
+
+void master::input()
+{
+	cout<<"Enter the name:"; 
+	cin>>name;
+	
+	cout<<"Enter the age:"; 
+	cin>>age;
+	
+	cout<<"Enter the account number:"; 
+	cin>>acno;
+	
+	cout<<"Enter your date of birth\nd:"; 
+	cin>>dd.d;
+	
+	cout<<"m:"; 
+	cin>>dd.m;
+	
+	cout<<"y:";
+ 	cin>>dd.y;
+}
+
+void master::display()
+{
+	cout<<name;
+	cout<<"\t"<<age;
+	cout<<"\t"<<acno;
+	cout<<"\t"<<dd.d<<"/"<<dd.m<<"/"<<dd.y<<"\n";
+}
+
+int master::update(float ac,int size)
+{
+	int pos=0;
+	
+	for(int i=0;i<size;i++)
+	{
+		if(m[i].acno==ac)
+		{
+			pos=i;
+			break;
+		}
+		else 
+			pos=-1;
+	}
+	return pos;		
+}
+
+void tabb()
+{
+	cout<<"\nName\tage\taccno\tDOB\n";
+	cout<<"____\t___\t_____\t___\n";
+}
+
+main()
+{
+	int s=0,i,opt,p;
+	char loop='y';
+	float acc;
+	master u;
+	while(loop=='y'||loop=='Y')
+	{
+		cout<<"1.Input\n2.Display\n3.Update\nOption:";
+		cin>>opt;
+		
+		switch(opt)
+		{
+			case 1:
+				cout<<"Enter the total number of inputs:";
+				cin>>s;
+				cout<<"Enter the details...\n";
+					for(i=0;i<s;i++)
+						m[i].input();
+				break;
+					
+			case 2:
+				tabb();
+				for(i=0;i<s;i++)
+					m[i].display();	
+				break;
+				
+			case 3:
+				cout<<"Enter the accno:";
+				cin>>acc;
+				p=u.update(acc,s);
+				if(p!=-1)
+				{
+					cout<<"\nEnter the new details\n";
+					m[p].input();
+				}
+				else	
+					cout<<"\n...Invalid...\n";
+				break;
+				
+			default:
+				cout<<"...Invalid Option...\n";
+				break;			
+		}		
+		cout<<"\nDo you want to continue(y/n):";
+		cin>>loop;
+	}
+return 0;
+}
+
+
+
+
+
+
+//Program-14// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+struct dob
+{
+	int d,m,y;	
+};
+
+class student
+{
+	protected:
+		char name[50];
+		dob dd;
+		int rno;
+	
+	public:
+		virtual void getdata()=0;
+		virtual void displayresult()=0;	
+					
+};
+
+class pg:public student
+{
+	public:
+		void getdata()
+		{
+			cout<<"Enter the data of PG student\n";
+			cout<<"Enter the name:"; cin>>name;
+			
+			cout<<"Enter the date of birth:\nd="; cin>>dd.d;
+			cout<<"m="; cin>>dd.m;
+			cout<<"y="; cin>>dd.y;
+			
+			cout<<"Enter the roll number:"; cin>>rno;
+		}	
+		
+		void displayresult()
+		{
+			cout<<"\nData of PG student\n";
+			cout<<"..................\n";
+			
+			cout<<"Name:"<<name;
+			cout<<"\nDate of birth:"<<dd.d<<"/"<<dd.m<<"/"<<dd.y;
+			cout<<"\nRoll Number:"<<rno<<"\n";
+		}	
+};
+
+class ug:public student
+{
+	public:
+		void getdata()
+		{
+			cout<<"Enter the data of UG student\n";
+			cout<<"Enter the name:"; cin>>name;
+			
+			cout<<"Enter the date of birth:\nd="; cin>>dd.d;
+			cout<<"m="; cin>>dd.m;
+			cout<<"y="; cin>>dd.y;
+			
+			cout<<"Enter the roll number:"; cin>>rno;
+		}
+		
+		void displayresult()
+		{
+			cout<<"\nData of UG student\n";
+			cout<<"..................\n";
+			
+			cout<<"Name:"<<name;
+			cout<<"\nDate of birth:"<<dd.d<<"/"<<dd.m<<"/"<<dd.y;
+			cout<<"\nRoll Number:"<<rno<<"\n";
+		}			
+};
+
+main()
+{
+	pg p,*ptr1;
+	ug u,*ptr2;
+	
+	ptr1=&p;
+	ptr2=&u;
+	
+	ptr1->getdata();
+	ptr2->getdata();
+	ptr1->displayresult();
+	ptr2->displayresult();
+	
+	return 0;
+}
+
+
+
+
+
+
+
+//Program-15// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+#include<math.h>
+using namespace std;
+class polygon /*abstract class*/
+{
+	public:
+	virtual float area()=0;
+	virtual float perimeter()=0;
+	virtual void getdata()=0;
+};
+class triangle:public polygon
+{
+	protected:
+	float a,b,c,s,ar;
+	public:
+	void getdata()/*note this function is not virtual*/
+	{
+		cout<<"enter the sides of triangle";
+		cin>>a>>b>>c;
+	}
+float area()
+{
+s=(a+b+c)/2.0;
+ar=sqrt(s*(s-a)*(s-b)*(s-c));
+return ar;
+}
+float perimeter()
+{
+return(a+b+c);
+}
+};
+class rectangle:public polygon
+{
+	protected:
+	float a,b;
+	public:
+	void getdata()
+	{
+		cout<<"enter the sides of rectangle";
+		cin>>a>>b;
+	}
+	float area()
+	{
+		
+	return(a*b);
+	}
+float perimeter()
+{
+	return(2.0*(a+b));
+}
+};
+class square:public polygon
+{
+	protected:
+	float a;
+	public:
+	void getdata()
+	{
+		cout<<"enter the sde of square";
+		cin>>a;
+	}
+	float area()
+	{
+		return(a*a);
+	}
+	float perimeter()
+	{
+		return(4.0*a);
+	}
+};
+int main()
+{
+	triangle t;
+	rectangle r;
+	square s;
+	polygon *ptr[5];
+	ptr[0]=&t;
+	ptr[1]=&r;
+	ptr[2]=&s;
+	for(int i=0;i<3;i++)
+	{
+		ptr[i]->getdata();
+		cout<<"\narea="<<ptr[i]->area();
+		cout<<"\n";
+		cout<<"perimeter="<<ptr[i]->perimeter();
+		cout<<"\n";
+	}
+	return 0;
+}
+
+
+
+
+
+
+
+//Program-16// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+
+struct link
+{
+	int data;
+	link *next;
+};
+
+class linklist
+{
+	link *first;
+	
+	public:
+		linklist()
+		{
+			first=NULL;
+		}
+		
+		void insertcontent (int d)
+		{
+			link *n=new link;
+			n->data=d;
+			n->next=first;
+			first=n;
+		}
+		
+		void deletecontent()
+		{
+			
+			while(first!=NULL)
+			{
+				link *t;
+				t=first;
+				first=first->next;
+				delete t;
+			}
+		}
+		
+		void display()
+		{
+			while(first!=NULL)
+			{
+				cout<<first->data;
+				first=first->next;
+				cout<<"\n";
+			}
+		}
+};
+
+main()
+{
+	linklist obj;
+	obj.insertcontent(10);
+	obj.insertcontent(20);
+	obj.insertcontent(30);
+	obj.insertcontent(40);
+	obj.display();
+	obj.deletecontent();
+	return 0;
+}
+
+
+
+
+
+
+//Program-17// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	int ch;
+	string s1("98765");
+	string s2("ZYXWV");
+	cout<<"\n Original String";
+	cout<<"\n\n First String:\t"<<s1;
+	cout<<"\n Second String:\t"<<s2;
+	cout<<"\n\n Select any from the List:";
+	cout<<" \n\n 1.Insert \n 2.Delete\n 3.Replace\n 4.Change Case\n";
+	cin>>ch;
+	switch(ch)
+	{
+		case 1:cout<<"\nPlace Secong String inside First String";
+		       s1.insert(4,s2);
+		       cout<<"\n\nThe Modified String is"<<s1<<"\n";
+		break;
+		case 2:cout<<"\nRemove the Char from First String";
+		       s1.erase(4,5);
+		       cout<<"\n\nNow First String is"<<s1<<"\n";
+		break;
+		case 3:cout<<"\nReplace the 3 Middle Characters in Second String with First String ";
+		       s2.replace(1,3,s1);
+	           cout<<"\n\nNow Second String"<<s2<<"\n";
+		break;
+		case 4:cout<<"\nChange Case";
+		       int n;
+
+		       cout<<"\n\nEnter the case of your String";
+		     	cin>>n;
+		       for(int i=0;i<s2.length();i++)
+		     {
+
+
+		     	if(n==1)
+		     	s2.at(i)=tolower(s2.at(i));
+		     	else
+			    s2.at(i)=toupper(s2.at(i));
+		     }
+		     cout<<"\n\nThe Changed String"<<s2<<"\n";
+		 break;
+		default:cout<<"\nInvalid Choice";
+	}
+}
+
+
+
+
+
+
+//Program-18// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+#include<string.h>
+#include<fstream>
+using namespace std;
+
+class student
+{
+	
+	char name[50];
+	float m1,m2,m3;
+	
+	public:
+	int rno;
+		student()
+		{
+			strcpy(name, " ");
+			rno=0;
+			m1=m2=m3=0.0;
+		}
+		void input()
+		{
+			cout<<"\nName:";
+			cin>>name;
+			
+			cout<<"Roll Number:";
+			cin>>rno;
+			
+			cout<<"Marks of 3 subjects\nm1="; cin>>m1;
+			cout<<"m2="; cin>>m2;
+			cout<<"m3="; cin>>m3;
+		}
+	
+		void disp()
+		{
+			cout<<"\n"<<name;
+			cout<<"\t"<<rno;
+			cout<<"\t"<<m1<<"\t"<<m2<<"\t"<<m3<<"\n";
+		}
+		friend student coppy(student);
+		
+}s[10];
+
+void tabb()
+{
+	cout<<"\nName\tNumber\tMark1\tMark2\tMark3";
+	cout<<"\n....\t......\t.....\t.....\t.....";	
+}
+student coppy(student s1)
+{
+	student stud;
+	strcpy(stud.name,s1.name);
+	stud.rno=s1.rno;
+	stud.m1=s1.m1;
+	stud.m2=s1.m2;
+	stud.m3=s1.m3;
+	return stud;
+}
+
+main()
+{
+	student temp,ss;
+	fstream f;
+	int opt,n,i,r,pos=-1;
+	char loop='y';
+	f.open("stud.txt", ios::in|ios::out|ios::app);
+	
+	while(loop=='y'||loop=='Y')
+	{
+		cout<<"\n1.Enter details\n\n2.Display details\n\n3.Search a student\n\n4.Modify a record\n\n5.Delete a record\n\noption=";
+		cin>>opt;
+		
+		switch(opt)
+		{
+			case 1:
+				cout<<"Enter the number of students:";
+				cin>>n;
+					for(i=0;i<n;i++)
+					{
+						s[i].input();
+						f.write((char*) &s[i], sizeof(s[i]));
+					}
+					
+					break;
+				
+			case 2:	
+				tabb();
+				for(i=0;i<n;i++)
+				{
+					f.read((char*) &s[i], sizeof(s[i]));
+					s[i].disp();
+				}	
+				break;
+				
+			case 3:
+				
+				pos=-1;
+				cout<<"Enter the roll number to be searched:";
+				cin>>r;
+				for(i=0;i<n;i++)
+				{
+					if(s[i].rno==r)
+					{
+						cout<<"\n...Student present...\n";
+						pos=i;
+						break;
+					}
+				}
+				if(pos!=-1)
+				{
+					tabb();
+					s[pos].disp();	
+				}
+				else
+					cout<<"\n...Student not present...\n";
+					
+				break;
+								
+			case 4:
+				pos=-1;
+				cout<<"Enter the roll number of the student:";
+				cin>>r;
+				for(i=0;i<n;i++)
+				{
+					if(s[i].rno==r)
+					{
+						cout<<"\n...Enter new details...\n";
+						pos=i;
+						break;
+					}
+				}
+				if(pos!=-1)
+				{
+					s[pos].input();	
+				}
+				else
+					cout<<"\n...Student not present...\n";
+				
+				break;
+				
+			case 5:
+				pos=-1;
+				cout<<"Enter the roll number of the student:";
+				cin>>r;
+				for(i=0;i<n;i++)
+				{
+					if(s[i].rno==r)
+					{
+						pos=i;
+							while(pos!=n)
+							{
+								temp=coppy(s[pos]);
+								s[pos]=(s[pos+1]);
+								s[pos+1]=(temp);
+								pos=pos+1;
+							}
+							n=n-1;
+		
+						break;
+					}
+				}
+				if(pos==-1)
+				{
+					cout<<"\n...Student not present...\n";
+				}
+				else
+					cout<<"\n...Successfully Deleted...\n";
+			
+				break;
+			
+			default:
+				cout<<"\nInvalid selection\n";
+						
+		}
+		cout<<"\nDo you want to continue(y/n):";
+		cin>>loop;
+	}
+return 0;
+}
+
+
+
+
+
+
+
+//Program-19// AMAN KUMAR MISHRA,IT-S3,ROLL NO-11
+
+#include<iostream>
+using namespace std;
+
+template<class t>
+
+void bubsort(t ar[], int s)
+{
+	int i,j;
+	
+	for(i=1;i<s;i++)
+	{
+		for(j=0;j<s-i;j++)
+		{
+			if(ar[j]>ar[j+1])
+			{
+				t temp;
+				temp=ar[j];
+				ar[j]=ar[j+1];
+				ar[j+1]=temp;	
+			}
+		}
+	}
+	cout<<"\n...Sorted array...\n";
+		for(i=0;i<s;i++)
+			cout<<ar[i]<<" ";	
+}
+
+main()
+{
+	int opt,a[10],i,size;
+	double d[10];
+	char loop='y';
+	while(loop=='y'||loop=='Y')
+	{
+		cout<<"1.Integer datatype array\n2.Double datatype array\noption:";
+		cin>>opt;
+		
+		switch(opt)
+		{
+			case 1:
+				cout<<"Enter the size of the array\n";
+				cin>>size;
+				cout<<"Enter the array elements\n";
+				for(i=0;i<size;i++)
+					cin>>a[i];
+				bubsort(a,size);
+				break;
+				
+			case 2:
+				cout<<"Enter the size of the array\n";
+				cin>>size;
+				cout<<"Enter the array elements\n";
+				for(i=0;i<size;i++)
+					cin>>d[i];
+				bubsort(d,size);
+				break;
+				
+			default:
+				cout<<"Invalid Option...\n";
+				break;
+		}
+		cout<<"\nDo you want to continue(y/n):";
+		cin>>loop;
+	}
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
