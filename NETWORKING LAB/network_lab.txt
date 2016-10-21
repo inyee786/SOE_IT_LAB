@@ -1,0 +1,589 @@
+**************************program 4*****************************
+
+import java.io.*;
+import java.net.*;
+class TCPServer
+{
+   public static void main(String argv[]) throws Exception
+      {
+         String clientSentence;
+         String capitalizedSentence;
+         ServerSocket welcomeSocket = new ServerSocket(8182);
+
+         while(true)
+         {
+            Socket connectionSocket = welcomeSocket.accept();
+            BufferedReader inFromClient =
+               new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+            clientSentence = inFromClient.readLine();
+            System.out.println("Received: " + clientSentence);
+            capitalizedSentence = clientSentence.toUpperCase() + '\n';
+            outToClient.writeBytes(capitalizedSentence);
+         }
+      }
+}
+
+import java.io.*;
+import java.net.*;
+class TCPClient
+{
+ public static void main(String argv[]) throws Exception
+ {
+  String sentence;
+  String modifiedSentence;
+  BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
+  Socket clientSocket = new Socket("localhost", 8182);
+  DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+  BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+  sentence = inFromUser.readLine();
+  outToServer.writeBytes(sentence + '\n');
+  modifiedSentence = inFromServer.readLine();
+  System.out.println("FROM SERVER: " + modifiedSentence);
+  clientSocket.close();
+ }
+}
+
+
+
+*****************program5*********************
+
+import java.io.*;
+import java.net.*;
+class UDPCserver
+{
+public static void main(String args[]) throws IOException
+			{
+			DatagramSocket serverSocket = new DatagramSocket(9876);
+            byte[] receivedata = new byte[1024];
+            byte[] senddata = new byte[1024];
+				while(true)
+                {
+                  DatagramPacket receivePacket = new DatagramPacket(receivedata,receivedata.length);
+                  serverSocket.receive(receivePacket);
+                  String sentence = new String( receivePacket.getData());
+                  System.out.println(sentence+"\n");
+				  sentence=sentence.trim();
+				  System.out.println("length="+sentence.length());
+				  char x;
+				  int n=0;
+				  int length1=sentence.length();
+				  sentence=sentence+" ";
+				  int length2=sentence.length();
+				  for(int i=0;i<length2;i++)
+				  {
+				  x=sentence.charAt(i);
+				  if(x==' ')
+				  n=n+1;
+				  }
+				  System.out.println("No. of words="+n);
+				  length1=length1-n+1;
+				  System.out.println(length1);
+				  InetAddress ipaddr=receivePacket.getAddress();
+				  int port=receivePacket.getPort();
+				  String len=Integer.toString(length1);
+				  System.out.println("length="+len);
+				  senddata=len.getBytes();
+				  DatagramPacket sendpacket=new DatagramPacket(senddata,senddata.length,ipaddr,port);
+				  serverSocket.send(sendpacket);
+				}
+			}
+}
+				  
+
+
+
+
+import java.io.*;
+import java.net.*;
+class UDPCclient
+{
+public static void main(String args[]) throws IOException
+{
+DatagramSocket clientSocket = new DatagramSocket();
+byte[] receivedata=new byte[5];
+byte[] senddata= new byte[1024];
+BufferedReader inFromUser =
+         new BufferedReader(new InputStreamReader(System.in));
+System.out.println("Enter the sentence");
+String sentence = inFromUser.readLine();
+senddata=sentence.getBytes();
+InetAddress ipaddr=InetAddress.getByName("localhost");
+int port=9876;
+
+DatagramPacket sendPacket=new DatagramPacket(senddata,senddata.length,ipaddr,port);
+      clientSocket.send(sendPacket);
+      DatagramPacket receivePacket = new DatagramPacket(receivedata, receivedata.length);
+      clientSocket.receive(receivePacket);
+String len2=new String(receivePacket.getData());
+System.out.println("From Server:\n length="+len2);
+clientSocket.close();
+}
+}
+
+
+*****************program6*****************************
+
+
+
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+class UDPServer
+{
+   public static void main(String args[]) throws Exception
+      {
+         DatagramSocket serverSocket = new DatagramSocket(9876);
+            byte[] receiveData = new byte[1024];
+            byte[] sendData = new byte[1024];
+            while(true)
+               {
+                  DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                  serverSocket.receive(receivePacket);
+                  String sentence = new String( receivePacket.getData());
+                  System.out.println("RECEIVED: " + sentence);
+                  InetAddress IPAddress = receivePacket.getAddress();
+                  int port = receivePacket.getPort();
+                  
+                  String capitalizedSentence = new StringBuffer(sentence).reverse().toString();
+                  sendData = capitalizedSentence.getBytes();
+                  DatagramPacket sendPacket =
+                  new DatagramPacket(sendData, sendData.length, IPAddress, port);
+                  serverSocket.send(sendPacket);
+               }
+      }
+}
+
+
+
+
+import java.io.*;
+import java.net.*;
+
+class UDPClient
+{
+   public static void main(String args[]) throws Exception
+   {
+      BufferedReader inFromUser =
+         new BufferedReader(new InputStreamReader(System.in));
+      DatagramSocket clientSocket = new DatagramSocket();
+      InetAddress IPAddress = InetAddress.getByName("localhost");
+      byte[] sendData = new byte[1024];
+      byte[] receiveData = new byte[1024];
+      String sentence = inFromUser.readLine();
+      sendData = sentence.getBytes();
+      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+      clientSocket.send(sendPacket);
+      DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+      clientSocket.receive(receivePacket);
+      String modifiedSentence = new String(receivePacket.getData());
+      System.out.println("FROM SERVER:" + modifiedSentence);
+      clientSocket.close();
+   }
+}
+
+*********************program7*****************************
+
+
+
+import java.io.*;
+import java.net.*;
+public class GossipServer
+{
+	public static void main(String args[]) throws Exception
+	{
+		ServerSocket sersock=new ServerSocket(3000);
+		System.out.println("Server ready for chatting");
+		Socket sock= sersock.accept();
+		BufferedReader keyRead=new BufferedReader(new InputStreamReader(System.in));
+		OutputStream ostream=sock.getOutputStream();
+		PrintWriter pwrite=new PrintWriter(ostream,true);
+		InputStream istream=sock.getInputStream();
+		BufferedReader receiveRead= new BufferedReader(new InputStreamReader(istream));
+		//System.out.println("start clientchat,type, and pressenter key")
+		String receiveMessage,sendMessage;
+		while(true)
+		{
+			if((receiveMessage=receiveRead.readLine())!=null)
+			{
+			System.out.println(receiveMessage);
+			}
+		sendMessage=keyRead.readLine();
+		pwrite.println(sendMessage);
+		pwrite.flush();
+		}
+	}
+}
+		
+import java.io.*;
+import java.net.*;
+public class GossipClient
+{
+	public static void main(String args[]) throws Exception
+	{
+		Socket sock=new Socket("127.0.0.1",3000);
+		BufferedReader keyRead=new BufferedReader(new InputStreamReader(System.in));
+		OutputStream ostream=sock.getOutputStream();
+		PrintWriter pwrite=new PrintWriter(ostream,true);
+		InputStream istream=sock.getInputStream();
+		BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));
+		System.out.println("start ClientChat, type and press enter key");
+		String receiveMessage,sendMessage;
+		while(true)
+		{
+			sendMessage=keyRead.readLine();
+			pwrite.println(sendMessage);
+			pwrite.flush();
+			if((receiveMessage=receiveRead.readLine())!=null)
+			{	
+				System.out.println(receiveMessage);
+			}
+		}
+	}
+}
+
+*************************program8*****************************
+
+import java.io.*;
+import java.net.*;
+public class multiserver 
+{
+  public static void main(String args[])throws IOException
+  {
+	  System.out.println("Listening for Client...");
+	  ServerSocket wsocket=new ServerSocket(6000);
+	  while(true)
+	  {
+		  Socket csocket=wsocket.accept();
+		  System.out.println("Connection is Established\n");
+		  thread t=new thread(csocket);
+		  t.start();
+	  }
+  }
+}
+class thread extends Thread
+{
+	Socket sock;
+	public thread(Socket s)
+	{
+		sock=s;
+	}
+	public void run()
+	{
+		try
+		{
+			BufferedReader serverreply=new BufferedReader(new InputStreamReader(System.in));
+			BufferedReader inFromClient=new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			DataOutputStream outToClient=new DataOutputStream(sock.getOutputStream());
+			while(true)
+			{
+				String clientsentence=inFromClient.readLine();
+				if(clientsentence.equals("exit"))
+				{
+					try
+					{
+						System.out.println("One Client is disconnected\n");
+						this.join();
+					}
+					catch(InterruptedException e)
+					{
+						
+					}
+				}
+				else
+				{
+					System.out.println(clientsentence);
+					System.out.print("Reply");
+					String reply=serverreply.readLine();
+					outToClient.writeBytes(reply+'\n');
+					System.out.println("waiting For message from Client\n");
+				}
+			}
+		}
+		catch(IOException e)
+		{
+			System.out.println(e);
+		}
+	}
+}
+
+
+
+
+
+import java.io.*;
+import java.net.*;
+public class multiclient
+{
+public static void main(String args[])throws IOException
+    {
+	 String sentence="",replysentence;
+	 String name="";
+	 BufferedReader inFromUser=new BufferedReader(new InputStreamReader(System.in));
+	 Socket client=new Socket("localhost",6000);
+	 DataOutputStream outToServer=new DataOutputStream(client.getOutputStream());
+	 BufferedReader inFromServer=new BufferedReader(new InputStreamReader(client.getInputStream()));
+	 System.out.println("Your Name:");
+	 name=inFromUser.readLine();
+	 System.out.println("\nEnter message for server pr write exit...\n");
+	 while(true)
+	 {
+		 System.out.println(name+":");
+		 sentence=inFromUser.readLine();
+		 outToServer.writeBytes(name+":"+sentence+"\n");
+		 if(sentence.equals("exit"))
+			 break;
+		 System.out.println("Waiting for reply...\n");
+		 replysentence=inFromServer.readLine();
+		 System.out.println("Server:"+replysentence);
+	 }
+	 client.close();
+	}
+}
+
+
+
+
+
+import java.io.*;
+import java.net.*;
+public class chatmulticlient 
+{
+ public static void main(String args[])throws IOException
+ {
+	 String sentence=" ",name=" ",replysentence;
+	 BufferedReader infromuser=new BufferedReader(new InputStreamReader(System.in));
+	 Socket clientsocket=new Socket("localhost",6000);
+	 DataOutputStream outToServer=new DataOutputStream(clientsocket.getOutputStream());
+	 BufferedReader infromserver=new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
+	 System.out.print("Your Name:");
+	 name=infromuser.readLine();
+	 System.out.print("Enter Message For The server of write Exit");
+	 while(true)
+	 {
+		 System.out.print(name+":");
+		 sentence=infromuser.readLine();
+		 outToServer.writeBytes(name+":"+sentence+'\n');
+		 if(sentence.equals("exit"))
+			 break;
+		 System.out.println("Waiting for reply:\n\n");
+		 replysentence=infromserver.readLine();
+		 System.out.println("FromServer:"+replysentence);
+	 }
+	 clientsocket.close();
+ }
+}
+
+
+*****************************program9*****************************
+
+
+import java.io.*;
+import java.net.*;
+public class UDPserverchat
+{
+ public static void main(String args[])throws IOException
+ {
+	 DatagramSocket serversocket=new DatagramSocket(9876);
+	 byte[] receivedata=new byte[1024];
+	 byte[] senddata=new byte[1024];
+	 BufferedReader infromclient=new BufferedReader(new InputStreamReader(System.in));
+	 while(true)
+	 {
+		 DatagramPacket receivepacket=new DatagramPacket(receivedata,receivedata.length);
+		 serversocket.receive(receivepacket);
+		 String sentence=new String(receivepacket.getData());
+		 System.out.println("Received:"+sentence);
+		 InetAddress ipaddr=receivepacket.getAddress();
+		 int port=receivepacket.getPort();
+		 System.out.println("From Server:");
+		 String sentence1=infromclient.readLine();
+		 senddata=sentence1.getBytes();
+		 DatagramPacket sendpacket=new DatagramPacket(senddata,senddata.length,ipaddr,port);
+		 serversocket.send(sendpacket);
+	 }
+	 
+ }
+}
+
+import java.io.*;
+import java.net.*;
+public class UDPclientchat 
+{
+	public static void main(String args[])throws IOException
+	{
+		BufferedReader infromuser=new BufferedReader(new InputStreamReader(System.in));
+		DatagramSocket clientsocket=new DatagramSocket();
+		InetAddress ipadd=InetAddress.getByName("localhost");
+		byte[] senddata=new byte[1024];
+		byte[] receivedata=new byte[1024];
+		while(true)
+		{
+			String sentence=infromuser.readLine();
+			senddata=sentence.getBytes();
+			DatagramPacket sendpacket=new DatagramPacket(senddata,senddata.length,ipadd,9876);
+			clientsocket.send(sendpacket);
+			DatagramPacket receivepacket=new DatagramPacket(receivedata,receivedata.length);
+			clientsocket.receive(receivepacket);
+			String modifiedsentence=new String(receivepacket.getData());
+			System.out.println("From Server:"+modifiedsentence);
+		}
+	}
+
+}
+
+********************************program10*****************************
+
+
+import java.io.*;
+import java.net.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.applet.*;
+
+import javax.swing.*;
+
+interface writable
+{
+	void write(String s);
+}
+class MessageListener extends Thread 
+{
+int port=6789;
+ServerSocket server;
+writable gui;
+public MessageListener()
+{
+	try
+	{
+		server=new ServerSocket(port);
+	}
+	catch(Exception e)
+	{
+		System.out.println("error "+e);
+	}
+}
+public MessageListener(writable gui,int port)
+    {
+	this.gui=gui;
+	this.port=port;
+	try
+	{
+		server=new ServerSocket(port);
+	}
+	catch(Exception e)
+	{
+		System.out.println("error "+e);
+	}
+	}
+@Override
+public void run()
+{
+ Socket clientsocket;
+ try
+ {
+	 while((clientsocket=server.accept())!=null)
+	 {
+		 BufferedReader in=new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
+		 String line=in.readLine();
+		 if(line!=null)
+			 gui.write(line);
+	 }
+ }
+ catch(Exception e)
+ {
+	 System.out.println("error"+e);
+ }
+}
+}
+
+class MessageTransmitter extends Thread
+{
+	String message,hostname;
+	int port;
+	public MessageTransmitter(String message,String hostname,int port)
+	{
+		this.port=port;
+		this.hostname=hostname;
+		this.message=message;
+	}
+	public void run()
+	{
+		try
+		{
+			Socket s=new Socket(hostname,port);
+			s.getOutputStream().write(message.getBytes());
+			s.close();
+		}
+		catch(Exception e)
+		{
+			System.out.print("error "+e);
+		}
+	}
+}
+
+public class appchat extends JFrame implements writable
+{
+static MessageListener Listen;
+static MessageTransmitter transmit;
+static JTextField rport,hostname,tport,message;
+static JLabel rlabel,hlabel,tlabel,mlabel;
+static JButton connect,send;
+static JTextArea area;
+
+public static void main(String args[])
+{
+JFrame frame=new JFrame();
+final writable gui=new appchat();
+frame.setLayout(new FlowLayout());
+rlabel=new JLabel("Receiving Port Number");
+frame.add(rlabel);
+rport=new JTextField(20);
+frame.add(rport);
+hlabel=new JLabel("Enter Hostname");
+frame.add(hlabel);
+hostname=new JTextField(20);
+frame.add(hostname);
+tlabel=new JLabel("Enter Target Port");
+frame.add(tlabel);
+tport=new JTextField(20);
+frame.add(tport);
+connect=new JButton("Listen");
+frame.add(connect);
+connect.addActionListener(new ActionListener()
+{
+public void actionPerformed(ActionEvent e)
+{
+Listen=new MessageListener(gui,Integer.parseInt(rport.getText()));
+Listen.start();
+}
+});
+area=new JTextArea(10,70);
+frame.add(area);
+mlabel=new JLabel("Write Message");
+frame.add(mlabel);
+message=new JTextField(70);
+frame.add(message);
+send=new JButton("send");
+frame.add(send);
+send.addActionListener(new ActionListener()
+{
+public void actionPerformed(ActionEvent e)
+{
+transmit=new MessageTransmitter(message.getText(),hostname.getText(),Integer.parseInt(tport.getText()));
+transmit.start();
+area.append("You:"+message.getText()+"\n");
+message.setText("");
+}
+});
+frame.setSize(800,800);
+frame.setVisible(true);
+}
+@Override
+public void write(String s)
+{
+	area.append("From Target:"+s+"\n");
+}
+}
